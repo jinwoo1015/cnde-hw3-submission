@@ -1,0 +1,28 @@
+
+=== C1: row counts  (8 rows)
+tbl            | n   
+---------------+-----
+fact_order     | 2499
+dim_date       | 92  
+dim_hour       | 24  
+dim_zone       | 8   
+dim_restaurant | 62  
+dim_customer   | 837 
+dim_driver     | 121 
+dim_conditions | 18  
+
+=== C2: SCD2 proof (expired and current versions of the changed restaurants)  (4 rows)
+restaurant_key | restaurant_id | restaurant_name | kitchen_capacity | valid_from | valid_to   | is_current
+---------------+---------------+-----------------+------------------+------------+------------+-----------
+11             | R011          | Thai Garden     | 15               | 2026-08-01 | 2026-09-14 | 0         
+64             | R011          | Thai Garden     | 20               | 2026-09-15 | 9999-12-31 | 1         
+37             | R037          | Tacos Pilsen    | 12               | 2026-08-01 | 2026-09-14 | 0         
+65             | R037          | Tacos Pilsen    | 16               | 2026-09-15 | 9999-12-31 | 1         
+
+=== C3: orders joined to each SCD2 version  (4 rows)
+restaurant_name | kitchen_capacity | valid_from | valid_to   | is_current | orders
+----------------+------------------+------------+------------+------------+-------
+Thai Garden     | 15               | 2026-08-01 | 2026-09-14 | 0          | 30    
+Thai Garden     | 20               | 2026-09-15 | 9999-12-31 | 1          | 24    
+Tacos Pilsen    | 12               | 2026-08-01 | 2026-09-14 | 0          | 58    
+Tacos Pilsen    | 16               | 2026-09-15 | 9999-12-31 | 1          | 33    

@@ -1,0 +1,31 @@
+parameters: $customer_id = CU00084, $rater_id = CU00731, $dish_id = I0086
+
+=== S1  Personalized recommendation: restaurants rated 4+ by customers who rated the same restaurants 4+ as this customer, not yet tried by them  (5 rows)
+recommended_restaurant | cuisine        | zone         | liked_by_similar_customers | avg_rating
+-----------------------+----------------+--------------+----------------------------+-----------
+Seoul Kitchen          | Korean         | Logan Square | 6                          | 4.57      
+Nonna's Table          | Pasta          | Lincoln Park | 5                          | 4.8       
+La Casita              | Tacos          | Lincoln Park | 5                          | 4.6       
+Shawarma King          | Middle Eastern | Loop         | 4                          | 4.5       
+Santorini Kitchen      | Greek          | Logan Square | 3                          | 5.0       
+(server time: 120 ms to first row)
+
+=== S2  Cross-restaurant dish recommendation: customers who ordered this dish also ordered which dishes elsewhere?  (5 rows)
+because_you_ordered | also_ordered         | at_restaurant       | customers
+--------------------+----------------------+---------------------+----------
+Spring Rolls        | Veggie Tacos         | Mi Tierra           | 5        
+Spring Rolls        | Korean Fried Chicken | Seoul Kitchen       | 4        
+Spring Rolls        | Shoyu Ramen          | Tanuki Noodle House | 4        
+Spring Rolls        | Brisket Plate        | Pit Boss BBQ        | 4        
+Spring Rolls        | Greek Salad          | Gyro Spot           | 4        
+(server time: 64 ms to first row)
+
+=== S3  Capacity-aware substitute: when Thai Garden is overloaded, which restaurants in the same cuisine family share its customers and deliver on time more often?  (5 rows)
+family | substitute          | cuisine | zone         | kitchen_capacity | shared_customers | late_rate_pct
+-------+---------------------+---------+--------------+------------------+------------------+--------------
+Asian  | Seoul Kitchen       | Korean  | Logan Square | 10               | 6                | 37.8         
+Asian  | Tanuki Noodle House | Ramen   | Loop         | 8                | 6                | 47.1         
+Asian  | Noodle Lab          | Ramen   | Pilsen       | 15               | 5                | 22.6         
+Asian  | Ichiban Ramen       | Ramen   | South Loop   | 15               | 5                | 25.0         
+Asian  | Sushi Taro          | Sushi   | West Loop    | 15               | 5                | 28.1         
+(server time: 179 ms to first row)

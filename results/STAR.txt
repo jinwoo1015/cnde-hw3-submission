@@ -1,0 +1,24 @@
+ok (0 rows): USE kitchen_dw
+ok (0 rows): DROP TABLE IF EXISTS fact_order
+ok (0 rows): DROP TABLE IF EXISTS dim_date, dim_hour, dim_zone, dim_restaurant, dim_customer, dim_drive
+ok (0 rows): CREATE TABLE dim_date ( date_key INT PRIMARY KEY, -- yyyymmdd full_date DATE NOT NULL UNIQ
+ok (0 rows): CREATE TABLE dim_hour ( hour_key TINYINT PRIMARY KEY, -- 0..23 hour_label CHAR(5) NOT NULL
+ok (0 rows): CREATE TABLE dim_zone ( zone_key SMALLINT AUTO_INCREMENT PRIMARY KEY, zone_id CHAR(3) NOT 
+ok (0 rows): CREATE TABLE dim_restaurant ( -- SCD TYPE 2 on kitchen_capacity restaurant_key INT AUTO_IN
+ok (0 rows): CREATE TABLE dim_customer ( customer_key INT AUTO_INCREMENT PRIMARY KEY, customer_id CHAR(
+ok (0 rows): CREATE TABLE dim_driver ( driver_key INT AUTO_INCREMENT PRIMARY KEY, driver_id CHAR(5) NOT
+ok (0 rows): CREATE TABLE dim_conditions ( -- junk dimension: weather x congestion at order time condit
+ok (0 rows): CREATE TABLE fact_order ( order_key INT AUTO_INCREMENT PRIMARY KEY, order_id CHAR(7) NOT N
+ok (92 rows): INSERT INTO dim_date (date_key, full_date, day_of_week, day_name, is_weekend, week_start, 
+ok (24 rows): INSERT INTO dim_hour (hour_key, hour_label, daypart) WITH RECURSIVE h AS (SELECT 0 AS hr U
+ok (8 rows): INSERT INTO dim_zone (zone_id, zone_name, traffic_region) SELECT p.zone_id, CASE p.zone_id
+ok (60 rows): INSERT INTO dim_restaurant (restaurant_id, restaurant_name, cuisine, cuisine_family, zone_
+ok (837 rows): INSERT INTO dim_customer (customer_id, customer_name_masked, email_domain, home_zone_id, s
+ok (1 rows): INSERT INTO dim_driver (driver_id, driver_name_masked, vehicle_type, driver_rating) VALUES
+ok (120 rows): INSERT INTO dim_driver (driver_id, driver_name_masked, vehicle_type, driver_rating) SELECT
+ok (18 rows): INSERT INTO dim_conditions (weather_condition, weather_severity, congestion_level) SELECT 
+ok (0 rows): CREATE TABLE stg_restaurant_changes ( restaurant_id CHAR(4) PRIMARY KEY, new_kitchen_capac
+ok (2 rows): INSERT INTO stg_restaurant_changes VALUES ('R011', 20, '2026-09-15'), ('R037', 16, '2026-0
+ok (2 rows): UPDATE dim_restaurant r JOIN stg_restaurant_changes c ON c.restaurant_id = r.restaurant_id
+ok (2 rows): INSERT INTO dim_restaurant (restaurant_id, restaurant_name, cuisine, cuisine_family, zone_
+ok (2499 rows): INSERT INTO fact_order (order_id, date_key, hour_key, zone_key, restaurant_key, customer_k

@@ -1,0 +1,21 @@
+
+=== graph counts  (17 rows)
+kind         | name           | n   
+-------------+----------------+-----
+node         | Order          | 2499
+node         | Customer       | 837 
+node         | Dish           | 457 
+node         | Driver         | 120 
+node         | Restaurant     | 60  
+node         | Cuisine        | 20  
+node         | Zone           | 8   
+relationship | CONTAINS       | 5457
+relationship | PLACED         | 2499
+relationship | FROM           | 2499
+relationship | DELIVERED_BY   | 2398
+relationship | RATED          | 1043
+relationship | LIVES_IN       | 837 
+relationship | SERVES         | 457 
+relationship | IN_ZONE        | 60  
+relationship | OF_CUISINE     | 60  
+relationship | SUBCATEGORY_OF | 15  

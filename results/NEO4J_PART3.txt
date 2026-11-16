@@ -1,0 +1,31 @@
+parameters: $customer_id = CU00084, $rater_id = CU00731, $dish_id = I0086
+
+=== P3-Q1  Multi-hop: restaurants recommended to a customer by customers who share 2+ restaurants with them (Customer->Order->Restaurant<-Order<-Customer->Order->Restaurant)  (5 rows)
+recommended_restaurant | zone         | similar_customers | score
+-----------------------+--------------+-------------------+------
+Mi Tierra              | Pilsen       | 39                | 111  
+Shawarma King          | Loop         | 33                | 100  
+La Casita              | Lincoln Park | 31                | 96   
+Tacos Pilsen           | Logan Square | 29                | 84   
+Koi Fish Market        | Wicker Park  | 26                | 67   
+(server time: 111 ms to first row)
+
+=== P3-Q2  Shared customers: which restaurants share the most customers with Thai Garden?  (5 rows)
+restaurant   | cuisine | shared_customers
+-------------+---------+-----------------
+Pit Boss BBQ | BBQ     | 13              
+Mi Tierra    | Tacos   | 11              
+Tacos Pilsen | Tacos   | 8               
+La Casita    | Tacos   | 7               
+Gyro Spot    | Greek   | 7               
+(server time: 61 ms to first row)
+
+=== P3-Q3  Hierarchy traversal: delivered orders and revenue for every cuisine under 'Asian' (variable-length path)  (5 rows)
+cuisine | restaurants | delivered_orders | food_revenue
+--------+-------------+------------------+-------------
+Ramen   | 5           | 248              | 10613.5     
+Korean  | 5           | 178              | 10046.0     
+Sushi   | 5           | 198              | 8327.0      
+Thai    | 5           | 136              | 5577.0      
+Chinese | 5           | 113              | 4530.5      
+(server time: 71 ms to first row)

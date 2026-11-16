@@ -1,0 +1,175 @@
+
+=== A1: How does the late-delivery rate change with weather in each zone, with subtotals per zone and overall? (WITH ROLLUP)  (54 rows)
+zone         | weather     | orders | delivered | late_rate_pct | avg_delivery_min
+-------------+-------------+--------+-----------+---------------+-----------------
+Hyde Park    | Rain        | 8      | 8         | 62.5          | 48.8            
+Hyde Park    | Clear       | 125    | 119       | 25.2          | 41.0            
+Hyde Park    | Drizzle     | 41     | 40        | 25.0          | 41.0            
+Hyde Park    | Cloudy      | 133    | 130       | 14.6          | 39.8            
+Hyde Park    | Light rain  | 11     | 9         | 11.1          | 37.0            
+Hyde Park    | ALL WEATHER | 318    | 306       | 21.2          | 40.6            
+Lincoln Park | Heavy rain  | 1      | 1         | 100.0         | 66.0            
+Lincoln Park | Rain        | 4      | 4         | 50.0          | 40.8            
+Lincoln Park | Drizzle     | 54     | 50        | 38.0          | 45.1            
+Lincoln Park | Clear       | 119    | 117       | 30.8          | 42.4            
+Lincoln Park | Cloudy      | 96     | 94        | 27.7          | 42.0            
+Lincoln Park | Light rain  | 4      | 4         | 25.0          | 42.5            
+Lincoln Park | ALL WEATHER | 278    | 270       | 31.5          | 42.8            
+Logan Square | Heavy rain  | 1      | 1         | 100.0         | 50.0            
+Logan Square | Rain        | 8      | 8         | 87.5          | 53.8            
+Logan Square | Drizzle     | 53     | 49        | 42.9          | 45.0            
+Logan Square | Light rain  | 4      | 4         | 25.0          | 42.0            
+Logan Square | Cloudy      | 114    | 109       | 21.1          | 40.4            
+Logan Square | Clear       | 155    | 152       | 21.1          | 40.5            
+Logan Square | ALL WEATHER | 335    | 323       | 26.3          | 41.5            
+Loop         | Rain        | 12     | 11        | 81.8          | 55.4            
+Loop         | Heavy rain  | 2      | 2         | 50.0          | 44.5            
+Loop         | Drizzle     | 120    | 119       | 48.7          | 47.3            
+Loop         | Light rain  | 17     | 17        | 47.1          | 49.8            
+Loop         | Clear       | 269    | 255       | 36.9          | 44.7            
+Loop         | Cloudy      | 252    | 235       | 34.9          | 44.7            
+Loop         | ALL WEATHER | 672    | 639       | 39.4          | 45.5            
+Pilsen       | Light rain  | 8      | 8         | 37.5          | 43.6            
+Pilsen       | Cloudy      | 70     | 66        | 34.8          | 41.7            
+Pilsen       | Clear       | 109    | 107       | 26.2          | 40.4            
+Pilsen       | Drizzle     | 27     | 25        | 24.0          | 43.2            
+Pilsen       | Rain        | 7      | 7         | 14.3          | 47.1            
+Pilsen       | ALL WEATHER | 221    | 213       | 28.6          | 41.5            
+South Loop   | Heavy rain  | 1      | 1         | 100.0         | 42.0            
+South Loop   | Light rain  | 5      | 5         | 60.0          | 47.4            
+South Loop   | Clear       | 38     | 36        | 30.6          | 43.0            
+South Loop   | Drizzle     | 14     | 14        | 21.4          | 40.0            
+South Loop   | Cloudy      | 33     | 32        | 6.3           | 38.0            
+South Loop   | Rain        | 1      | 1         | 0.0           | 44.0            
+South Loop   | ALL WEATHER | 92     | 89        | 22.5          | 41.0            
+West Loop    | Light rain  | 7      | 7         | 85.7          | 48.9            
+West Loop    | Rain        | 4      | 4         | 75.0          | 54.5            
+West Loop    | Drizzle     | 41     | 40        | 35.0          | 44.9            
+West Loop    | Cloudy      | 80     | 76        | 25.0          | 40.8            
+West Loop    | Clear       | 89     | 85        | 22.4          | 41.7            
+West Loop    | ALL WEATHER | 221    | 212       | 28.8          | 42.4            
+Wicker Park  | Heavy rain  | 1      | 1         | 100.0         | 57.0            
+Wicker Park  | Rain        | 6      | 5         | 80.0          | 47.8            
+Wicker Park  | Drizzle     | 64     | 63        | 39.7          | 44.9            
+Wicker Park  | Light rain  | 13     | 13        | 38.5          | 44.9            
+Wicker Park  | Clear       | 152    | 140       | 35.0          | 43.3            
+Wicker Park  | Cloudy      | 126    | 124       | 25.0          | 41.3            
+Wicker Park  | ALL WEATHER | 362    | 346       | 33.2          | 43.0            
+ALL ZONES    | ALL WEATHER | 2499   | 2398      | 31.0          | 42.9            
+
+=== A2: Did the SCD2 kitchen expansion change performance? Late rate and queue pressure per restaurant version  (4 rows)
+restaurant_name | kitchen_capacity | valid_from | valid_to   | orders | avg_queue_to_capacity | late_rate_pct
+----------------+------------------+------------+------------+--------+-----------------------+--------------
+Tacos Pilsen    | 12               | 2026-08-01 | 2026-09-14 | 58     | 0.70                  | 21.4         
+Tacos Pilsen    | 16               | 2026-09-15 | 9999-12-31 | 33     | 0.53                  | 24.2         
+Thai Garden     | 15               | 2026-08-01 | 2026-09-14 | 30     | 0.72                  | 37.0         
+Thai Garden     | 20               | 2026-09-15 | 9999-12-31 | 24     | 0.64                  | 61.9         
+
+=== A3: Which dayparts and congestion levels produce the most late deliveries on weekdays vs weekends?  (12 rows)
+day_type | daypart    | congestion_level | orders | late_rate_pct | avg_typical_mph
+---------+------------+------------------+--------+---------------+----------------
+Weekday  | Dinner     | heavy            | 295    | 63.2          | 17.0           
+Weekend  | Dinner     | heavy            | 89     | 59.8          | 17.2           
+Weekend  | Dinner     | moderate         | 88     | 55.3          | 21.1           
+Weekday  | Dinner     | moderate         | 223    | 52.2          | 20.8           
+Weekday  | Dinner     | free             | 377    | 36.7          | 24.2           
+Weekend  | Dinner     | free             | 196    | 33.2          | 25.1           
+Weekday  | Lunch      | heavy            | 136    | 24.4          | 17.2           
+Weekend  | Lunch      | moderate         | 38     | 23.7          | 21.1           
+Weekday  | Afternoon  | heavy            | 65     | 23.4          | 16.7           
+Weekend  | Lunch      | heavy            | 54     | 21.6          | 18.0           
+Weekday  | Late night | moderate         | 27     | 20.0          | 20.6           
+Weekday  | Lunch      | moderate         | 191    | 16.7          | 20.6           
+
+=== A4: Weekly revenue and late-rate trend per cuisine family, with week-over-week revenue change  (65 rows)
+week_start | cuisine_family | revenue | wow_revenue_pct | late_rate_pct
+-----------+----------------+---------+-----------------+--------------
+2026-07-27 | American       | 683.50  | NULL            | 42.9         
+2026-08-03 | American       | 1357.50 | 98.6            | 42.4         
+2026-08-10 | American       | 1906.00 | 40.4            | 34.2         
+2026-08-17 | American       | 1948.50 | 2.2             | 38.2         
+2026-08-24 | American       | 1671.00 | -14.2           | 20.0         
+2026-08-31 | American       | 1200.00 | -28.2           | 15.2         
+2026-09-07 | American       | 1319.00 | 9.9             | 26.7         
+2026-09-14 | American       | 1685.00 | 27.7            | 26.3         
+2026-09-21 | American       | 2242.50 | 33.1            | 26.8         
+2026-09-28 | American       | 1899.50 | -15.3           | 50.0         
+2026-10-05 | American       | 1669.00 | -12.1           | 20.7         
+2026-10-12 | American       | 1310.00 | -21.5           | 45.5         
+2026-10-19 | American       | 1851.50 | 41.3            | 32.4         
+2026-07-27 | Asian          | 1204.00 | NULL            | 29.2         
+2026-08-03 | Asian          | 2708.00 | 124.9           | 37.5         
+2026-08-10 | Asian          | 3774.00 | 39.4            | 42.5         
+2026-08-17 | Asian          | 3354.00 | -11.1           | 47.1         
+2026-08-24 | Asian          | 2915.00 | -13.1           | 33.8         
+2026-08-31 | Asian          | 3411.00 | 17.0            | 40.0         
+2026-09-07 | Asian          | 3657.50 | 7.2             | 39.0         
+2026-09-14 | Asian          | 2848.50 | -22.1           | 32.8         
+2026-09-21 | Asian          | 3892.00 | 36.6            | 21.1         
+2026-09-28 | Asian          | 3329.50 | -14.5           | 37.0         
+2026-10-05 | Asian          | 3163.50 | -5.0            | 29.2         
+2026-10-12 | Asian          | 2659.00 | -15.9           | 32.1         
+2026-10-19 | Asian          | 3492.50 | 31.3            | 20.3         
+2026-07-27 | European       | 163.00  | NULL            | 66.7         
+2026-08-03 | European       | 1307.00 | 701.8           | 38.5         
+2026-08-10 | European       | 1175.00 | -10.1           | 30.4         
+2026-08-17 | European       | 1758.00 | 49.6            | 41.9         
+2026-08-24 | European       | 1065.50 | -39.4           | 16.0         
+2026-08-31 | European       | 1291.00 | 21.2            | 30.4         
+2026-09-07 | European       | 1693.50 | 31.2            | 25.8         
+2026-09-14 | European       | 2045.50 | 20.8            | 27.8         
+2026-09-21 | European       | 1398.00 | -31.7           | 34.8         
+2026-09-28 | European       | 1918.50 | 37.2            | 37.5         
+2026-10-05 | European       | 1478.50 | -22.9           | 7.4          
+2026-10-12 | European       | 1405.50 | -4.9            | 30.0         
+2026-10-19 | European       | 1369.00 | -2.6            | 18.2         
+2026-07-27 | Latin American | 553.00  | NULL            | 33.3         
+2026-08-03 | Latin American | 803.50  | 45.3            | 21.4         
+2026-08-10 | Latin American | 845.50  | 5.2             | 32.3         
+2026-08-17 | Latin American | 1011.50 | 19.6            | 31.0         
+2026-08-24 | Latin American | 1414.00 | 39.8            | 18.6         
+2026-08-31 | Latin American | 1473.00 | 4.2             | 17.9         
+2026-09-07 | Latin American | 1285.50 | -12.7           | 29.0         
+2026-09-14 | Latin American | 1379.50 | 7.3             | 33.3         
+2026-09-21 | Latin American | 854.50  | -38.1           | 36.0         
+2026-09-28 | Latin American | 946.50  | 10.8            | 15.4         
+2026-10-05 | Latin American | 768.00  | -18.9           | 29.6         
+2026-10-12 | Latin American | 1274.00 | 65.9            | 30.0         
+2026-10-19 | Latin American | 921.00  | -27.7           | 24.1         
+2026-07-27 | Mediterranean  | 317.50  | NULL            | 12.5         
+2026-08-03 | Mediterranean  | 871.00  | 174.3           | 43.5         
+2026-08-10 | Mediterranean  | 1420.50 | 63.1            | 41.9         
+2026-08-17 | Mediterranean  | 1918.00 | 35.0            | 31.6         
+2026-08-24 | Mediterranean  | 1149.50 | -40.1           | 26.7         
+2026-08-31 | Mediterranean  | 1669.00 | 45.2            | 26.3         
+2026-09-07 | Mediterranean  | 1152.00 | -31.0           | 13.6         
+2026-09-14 | Mediterranean  | 1559.50 | 35.4            | 30.0         
+
+=== A5: Which vehicle types stay on time in heavy congestion and rain?  (25 rows)
+vehicle_type | congestion_level | weather_group        | deliveries | on_time_pct | avg_delivery_min
+-------------+------------------+----------------------+------------+-------------+-----------------
+bike         | free             | Drizzle / light rain | 46         | 84.8        | 40.7            
+bike         | free             | Dry                  | 273        | 75.5        | 41.0            
+bike         | free             | Rain / heavy rain    | 11         | 45.5        | 49.9            
+bike         | heavy            | Drizzle / light rain | 51         | 49.0        | 47.6            
+bike         | heavy            | Dry                  | 166        | 62.0        | 45.8            
+bike         | moderate         | Drizzle / light rain | 51         | 60.8        | 45.2            
+bike         | moderate         | Dry                  | 164        | 74.4        | 42.1            
+car          | free             | Drizzle / light rain | 58         | 67.2        | 42.7            
+car          | free             | Dry                  | 267        | 79.0        | 39.7            
+car          | heavy            | Drizzle / light rain | 45         | 44.4        | 49.5            
+car          | heavy            | Dry                  | 164        | 60.4        | 45.4            
+car          | moderate         | Drizzle / light rain | 47         | 57.4        | 44.5            
+car          | moderate         | Dry                  | 167        | 71.3        | 41.9            
+e-bike       | free             | Drizzle / light rain | 17         | 58.8        | 44.1            
+e-bike       | free             | Dry                  | 109        | 81.7        | 39.9            
+e-bike       | heavy            | Drizzle / light rain | 19         | 52.6        | 46.6            
+e-bike       | heavy            | Dry                  | 55         | 52.7        | 47.5            
+e-bike       | moderate         | Drizzle / light rain | 16         | 56.3        | 46.5            
+e-bike       | moderate         | Dry                  | 71         | 69.0        | 42.5            
+scooter      | free             | Drizzle / light rain | 46         | 67.4        | 43.2            
+scooter      | free             | Dry                  | 201        | 82.1        | 39.1            
+scooter      | heavy            | Drizzle / light rain | 37         | 51.4        | 48.2            
+scooter      | heavy            | Dry                  | 125        | 60.8        | 45.8            
+scooter      | moderate         | Drizzle / light rain | 34         | 67.6        | 43.2            
+scooter      | moderate         | Dry                  | 115        | 73.9        | 41.4            

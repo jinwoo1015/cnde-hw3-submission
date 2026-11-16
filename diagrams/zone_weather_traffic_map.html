@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+    <html lang="en"><head><meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Weather and traffic vs. delivery reliability: Chicago zones</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+    <style>
+    :root{color-scheme:light}
+    body{margin:0;font-family:-apple-system,Segoe UI,Helvetica,Arial,sans-serif;color:#1d2433;background:#fafafa}
+    header{padding:14px 20px 8px}
+    h1{font-size:19px;margin:0 0 4px;color:#1F3864}
+    p.sub{margin:0;font-size:13px;color:#555}
+    .wrap{display:flex;gap:14px;padding:8px 20px 20px;flex-wrap:wrap}
+    #map{flex:1 1 620px;height:620px;border-radius:8px;border:1px solid #ddd}
+    aside{flex:0 1 330px;font-size:13px}
+    .btns{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
+    .btns button{border:1px solid #c9cfdb;background:#fff;border-radius:16px;padding:6px 11px;font-size:12.5px;cursor:pointer}
+    .btns button.on{background:#1F3864;color:#fff;border-color:#1F3864}
+    .card{background:#fff;border:1px solid #e1e4ea;border-radius:8px;padding:10px 12px;margin-bottom:10px}
+    .card h3{margin:0 0 6px;font-size:13.5px;color:#1F3864}
+    table{border-collapse:collapse;width:100%;font-size:12.5px}
+    td,th{padding:3px 4px;text-align:right;border-bottom:1px solid #eee}
+    td:first-child,th:first-child{text-align:left}
+    .legend{background:#fff;padding:8px 10px;border-radius:6px;box-shadow:0 1px 4px rgba(0,0,0,.2);font-size:12px;line-height:1.5}
+    .bar{height:10px;width:170px;border-radius:3px;margin:4px 0}
+    .note{font-size:11.5px;color:#666}
+    </style></head><body>
+    <header><h1>Where weather and traffic hurt delivery reliability</h1>
+    <p class="sub">8 Chicago delivery zones · Aug 1 to Oct 24, 2026 · circle size = order volume · click a zone for details</p></header>
+    <div class="wrap"><div id="map"></div>
+    <aside>
+    <div class="btns" id="btns"></div>
+    <div class="card" id="explain"></div>
+    <div class="card"><h3>All zones</h3><table>
+    <tr><td>Late rate, all delivered orders</td><td><b>31.0%</b></td></tr>
+    <tr><td>Dry hours → wet hours</td><td>27.9% → <b>42.2%</b></td></tr>
+    <tr><td>Free traffic → congested</td><td>23.0% → <b>37.2%</b></td></tr></table></div>
+    <div class="card note">Weather: Open-Meteo hourly history per zone. Traffic: typical speed per zone, weekday and hour from the City of Chicago Traffic Tracker (Aug–Oct 2025 profile). Orders are synthetic, with documented rule-based weather and traffic delays (see the Stage 3 report). Rates use delivered orders only. Cells with fewer than 30 orders are shown as "n/a".</div>
+    </aside></div>
+    <script>
+    const Z=[{"zone_id": "Z01", "zone": "Hyde Park", "lat": 41.7943, "lon": -87.5907, "orders": 318, "delivered": 306, "late": 21.2, "late_dry": 19.7, "late_wet": 28.1, "n_wet": 57, "late_free": 22.1, "late_cong": 5.9, "n_cong": 17, "pct_cong": 5.6, "avg_min": 40.6, "avg_wx_delay": 0.66, "avg_tr_delay": 0.11, "speed": 24.6, "rain": 8.4}, {"zone_id": "Z02", "zone": "Loop", "lat": 41.8837, "lon": -87.6289, "orders": 672, "delivered": 639, "late": 39.4, "late_dry": 35.9, "late_wet": 51.0, "n_wet": 149, "late_free": 6.2, "late_cong": 40.3, "n_cong": 623, "pct_cong": 97.5, "avg_min": 45.5, "avg_wx_delay": 0.8, "avg_tr_delay": 4.54, "speed": 17.4, "rain": 15.1}, {"zone_id": "Z03", "zone": "South Loop", "lat": 41.858, "lon": -87.627, "orders": 92, "delivered": 89, "late": 22.5, "late_dry": 19.1, "late_wet": 33.3, "n_wet": 21, "late_free": 22.5, "late_cong": null, "n_cong": 0, "pct_cong": 0.0, "avg_min": 41.0, "avg_wx_delay": 0.85, "avg_tr_delay": 0.0, "speed": 27.2, "rain": null}, {"zone_id": "Z04", "zone": "West Loop", "lat": 41.8827, "lon": -87.6533, "orders": 221, "delivered": 212, "late": 28.8, "late_dry": 23.6, "late_wet": 45.1, "n_wet": 51, "late_free": 18.8, "late_cong": 34.8, "n_cong": 132, "pct_cong": 62.3, "avg_min": 42.4, "avg_wx_delay": 0.8, "avg_tr_delay": 1.47, "speed": 21.8, "rain": 21.5}, {"zone_id": "Z05", "zone": "Lincoln Park", "lat": 41.9214, "lon": -87.6513, "orders": 278, "delivered": 270, "late": 31.5, "late_dry": 29.4, "late_wet": 39.0, "n_wet": 59, "late_free": 16.7, "late_cong": 33.8, "n_cong": 234, "pct_cong": 86.7, "avg_min": 42.8, "avg_wx_delay": 0.75, "avg_tr_delay": 2.61, "speed": 20.0, "rain": 9.6}, {"zone_id": "Z06", "zone": "Wicker Park", "lat": 41.9088, "lon": -87.6796, "orders": 362, "delivered": 346, "late": 33.2, "late_dry": 30.3, "late_wet": 42.7, "n_wet": 82, "late_free": 17.5, "late_cong": 41.6, "n_cong": 226, "pct_cong": 65.3, "avg_min": 43.0, "avg_wx_delay": 0.79, "avg_tr_delay": 1.55, "speed": 21.7, "rain": 12.4}, {"zone_id": "Z07", "zone": "Logan Square", "lat": 41.9234, "lon": -87.7083, "orders": 335, "delivered": 323, "late": 26.3, "late_dry": 21.1, "late_wet": 48.4, "n_wet": 62, "late_free": 26.1, "late_cong": 26.6, "n_cong": 124, "pct_cong": 38.4, "avg_min": 41.5, "avg_wx_delay": 0.7, "avg_tr_delay": 0.77, "speed": 22.5, "rain": 27.3}, {"zone_id": "Z08", "zone": "Pilsen", "lat": 41.8525, "lon": -87.6631, "orders": 221, "delivered": 213, "late": 28.6, "late_dry": 29.5, "late_wet": 25.0, "n_wet": 40, "late_free": 28.6, "late_cong": null, "n_cong": 0, "pct_cong": 0.0, "avg_min": 41.5, "avg_wx_delay": 0.69, "avg_tr_delay": 0.0, "speed": 25.9, "rain": -4.5}];
+    const M={
+     late:{label:"Overall late rate",get:z=>z.late,min:18,max:42,pal:"heat",unit:"%",txt:"Share of delivered orders that arrived more than 10 minutes after the quoted ETA."},
+     late_dry:{label:"Late rate, dry hours",get:z=>z.late_dry,min:18,max:52,pal:"heat",unit:"%",txt:"Late rate for orders placed in hours with no rain, drizzle or snow."},
+     late_wet:{label:"Late rate, wet hours",get:z=>z.n_wet>=30?z.late_wet:null,min:18,max:52,pal:"heat",unit:"%",txt:"Late rate for orders placed while it was raining, drizzling or snowing in that zone."},
+     rain:{label:"Rain effect (pts)",get:z=>z.n_wet>=30?z.late_wet-z.late_dry:null,min:-10,max:30,pal:"div",unit:" pts",txt:"How many percentage points the late rate rises on wet hours compared with dry hours."},
+     pct_cong:{label:"Congested share",get:z=>z.pct_cong,min:0,max:100,pal:"blue",unit:"%",txt:"Share of orders placed when typical traffic in the zone was moderate or heavy (under 22 mph)."},
+     late_cong:{label:"Late rate, congested",get:z=>(z.n_cong>=30)?z.late_cong:null,min:18,max:52,pal:"heat",unit:"%",txt:"Late rate for orders placed in moderate or heavy traffic."}
+    };
+    const pals={heat:["#fff5b8","#fec44f","#fb6a4a","#cb181d","#67000d"],blue:["#f7fbff","#9ecae1","#4292c6","#08519c","#08306b"],div:["#1a9850","#d9ef8b","#ffffbf","#fc8d59","#a50026"]};
+    function lerp(a,b,t){const p=x=>parseInt(x,16);return "#"+[1,3,5].map(i=>Math.round(p(a.substr(i,2))+(p(b.substr(i,2))-p(a.substr(i,2)))*t).toString(16).padStart(2,"0")).join("")}
+    function color(m,v){if(v==null)return "#bdbdbd";const c=pals[m.pal];let t=(v-m.min)/(m.max-m.min);if(m.pal==="div"){t=v<0?0.5*(v-m.min)/(0-m.min):0.5+0.5*v/m.max}
+     t=Math.max(0,Math.min(1,t))*(c.length-1);const i=Math.min(Math.floor(t),c.length-2);return lerp(c[i],c[i+1],t-i)}
+    const fmt=(v,u)=>v==null?"n/a":(u===" pts"&&v>0?"+":"")+v.toFixed(1)+u;
+    const map=L.map("map",{scrollWheelZoom:false}).setView([41.873,-87.645],12);
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",{maxZoom:17,attribution:"&copy; OpenStreetMap contributors"}).addTo(map);
+    const maxO=Math.max(...Z.map(z=>z.orders));
+    const circles=Z.map(z=>{const c=L.circleMarker([z.lat,z.lon],{radius:12+26*Math.sqrt(z.orders/maxO),weight:1.5,color:"#333",fillOpacity:.82}).addTo(map);
+     c.bindPopup(`<b>${z.zone}</b> (${z.orders} orders)<table>
+     <tr><td>Late rate</td><td>${fmt(z.late,"%")}</td></tr>
+     <tr><td>Dry → wet hours</td><td>${fmt(z.late_dry,"%")} → ${z.n_wet>=30?fmt(z.late_wet,"%"):"n/a"}</td></tr>
+     <tr><td>Free → congested traffic</td><td>${(z.delivered-z.n_cong)>=30?fmt(z.late_free,"%"):"n/a"} → ${z.n_cong>=30?fmt(z.late_cong,"%"):"n/a"}</td></tr>
+     <tr><td>Orders in congestion</td><td>${z.pct_cong.toFixed(0)}%</td></tr>
+     <tr><td>Typical speed</td><td>${z.speed} mph</td></tr>
+     <tr><td>Avg delivery</td><td>${z.avg_min} min</td></tr>
+     <tr><td>Avg added delay: weather / traffic</td><td>${z.avg_wx_delay} / ${z.avg_tr_delay} min</td></tr></table>`);
+     c.bindTooltip(z.zone,{permanent:true,direction:"top",offset:[0,-10],className:""});return c});
+    const legend=L.control({position:"bottomleft"});legend.onAdd=()=>{const d=L.DomUtil.create("div","legend");d.id="legend";return d};legend.addTo(map);
+    function show(k){const m=M[k];
+     document.querySelectorAll("#btns button").forEach(b=>b.classList.toggle("on",b.dataset.k===k));
+     circles.forEach((c,i)=>{const v=m.get(Z[i]);c.setStyle({fillColor:color(m,v)});c.setTooltipContent(`${Z[i].zone}: ${fmt(v,m.unit)}`)});
+     const c=pals[m.pal];document.getElementById("legend").innerHTML=`<b>${m.label}</b><div class="bar" style="background:linear-gradient(90deg,${c.join(",")})"></div>
+      <div style="display:flex;justify-content:space-between;width:170px"><span>${m.min}${m.unit}</span><span>${m.max}${m.unit}</span></div><span style="color:#888">grey = n/a (under 30 orders)</span>`;
+     const rows=Z.map(z=>[z.zone,m.get(z)]).sort((a,b)=>(b[1]??-999)-(a[1]??-999));
+     document.getElementById("explain").innerHTML=`<h3>${m.label}</h3><div class="note" style="margin-bottom:6px">${m.txt}</div><table>${rows.map(r=>`<tr><td>${r[0]}</td><td>${fmt(r[1],m.unit)}</td></tr>`).join("")}</table>`}
+    const bt=document.getElementById("btns");Object.entries(M).forEach(([k,m])=>{const b=document.createElement("button");b.textContent=m.label;b.dataset.k=k;b.onclick=()=>show(k);bt.appendChild(b)});
+    show("late");
+    </script></body></html>

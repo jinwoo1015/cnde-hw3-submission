@@ -1,0 +1,17 @@
+# Python / OS
+__pycache__/
+*.pyc
+.venv/
+.DS_Store
+# secrets: never commit
+.env
+*.env
+Neo4j-*.txt
+*credentials*
+# LaTeX build files
+*.aux
+*.log
+*.out
+*.toc
+data/
+logs/
